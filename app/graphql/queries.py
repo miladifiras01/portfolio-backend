@@ -11,7 +11,7 @@ class Query:
     def get_projects(self) -> List[ProjectType]:
         with Session(engine) as session:
             projects = session.exec(select(Project)).all()  # Fetch all projects
-            return [ProjectType(id=p.id, name=p.name, description=p.description, github_url=p.github_url, technologies=[TechnologyType(id=tech.id, name=tech.name) for tech in p.technologies]) for p in projects]
+            return [ProjectType(id=p.id, name=p.name, description=p.description, github_url=p.github_url, technologies=[TechnologyType(id=tech.id, name=tech.name) for tech in p.technologies], images=[ProjectImages(image_url=image.image_url) for image in p.images], short_description= p.short_description) for p in projects]
 
     @strawberry.field
     def get_project(self, id: int) -> ProjectType | None:
