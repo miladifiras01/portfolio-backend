@@ -19,6 +19,7 @@ class Project(SQLModel, table=True):
         back_populates="projects",
         link_model=ProjectTechnologyLink
     )
+    images: List["ProjectImages"] = Relationship(back_populates="project")
     created_at: datetime = Field(default_factory=datetime.now)
 
 class Technology(SQLModel, table=True):
@@ -26,3 +27,10 @@ class Technology(SQLModel, table=True):
     name: str
     projects: List[Project] = Relationship(back_populates="technologies", link_model=ProjectTechnologyLink)
     created_at: datetime | None = Field(default_factory=datetime.now)
+
+class ProjectImages(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    project_id: int = Field(foreign_key="project.id")
+    image_url: str
+    created_at: datetime = Field(default_factory=datetime.now)
+    project: Project = Relationship(back_populates="images")
