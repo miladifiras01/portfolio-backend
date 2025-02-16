@@ -122,8 +122,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# SQLAlchemy Migrations
-alembic/versions/
 
 # VS Code
 .vscode/
