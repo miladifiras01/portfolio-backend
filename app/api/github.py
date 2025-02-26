@@ -162,9 +162,9 @@ ACTION_HANDLERS = {
 }
 
 @github_router.post("/webhook")
-def github_webhook(request: Request):
+async def github_webhook(request: Request):
     try:
-        payload = request.json()
+        payload = await request.json()
         event = request.headers.get("x-github-event", None)
         repository = payload.get("repository", {})
         if event == "ping":
