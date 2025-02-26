@@ -163,17 +163,20 @@ ACTION_HANDLERS = {
 
 @github_router.post("/webhook")
 def github_webhook(request: Request):
-    payload = request.json()
-    event = request.headers.get("x-github-event", None)
-    repository = payload.get("repository", {})
-    if event == "ping":
-        return handle_created(repository)
-    if event == "push":
-        return handle_push(payload)
-    if event == "repository":
-        action = payload.get("action")
-        return ACTION_HANDLERS[action](repository)
-    if event == "meta":
-        action = payload.get("action")
-        if action == "deleted":
-            return handle_deleted(repository)
+    try:
+        payload = request.json()
+        event = request.headers.get("x-github-event", None)
+        repository = payload.get("repository", {})
+        if event == "ping":
+            return handle_created(repository)
+        if event == "push":
+            return handle_push(payload)
+        if event == "repository":
+            action = payload.get("action")
+            return ACTION_HANDLERS[action](repository)
+        if event == "meta":
+            action = payload.get("action")
+            if action == "deleted":
+                return handle_deleted(repository)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
