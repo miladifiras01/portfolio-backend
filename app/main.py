@@ -4,10 +4,9 @@ from app.database import engine
 from sqlmodel import SQLModel
 from app.graphql.schema import schema
 from strawberry.fastapi import GraphQLRouter
-from .models import Project
-from .models import Technology
-from .models import ProjectTechnologyLink
+from .models import *
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.github import github_router
 
 app = FastAPI()
 
@@ -25,3 +24,4 @@ def read_root():
 # Add GraphQL router
 graphql_app = GraphQLRouter(schema)
 app.include_router(graphql_app, prefix="/graphql")
+app.include_router(github_router, prefix="/github", tags=["GitHub Webhooks"])
