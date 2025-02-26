@@ -8,8 +8,6 @@ def create_project(name: str, description: str = "", github_url: str | None = No
         try:
             project = Project(name=name, description=description, github_url =github_url , short_description= short_description)
             session.add(project)
-            session.commit()
-            session.refresh(project)
             for tech_name in technologies:
                 technology = session.exec(select(Technology).where( Technology.name == tech_name )).first()
                 if not technology:
@@ -25,7 +23,7 @@ def create_project(name: str, description: str = "", github_url: str | None = No
                 session.flush()
             session.commit()
             session.refresh(project)
-            return ProjectType(id=project.id, name=project.name, description=project.description, github_url=project.github_url, technologies=[TechnologyType(id=tech.id, name=tech.name) for tech in project.technologies], images=[ProjectImagesType(id=img.id, image_url=img.image_url) for img in project.images])
+            return ProjectType(id=project.id, name=project.name, description=project.description, github_url=project.github_url, technologies=[TechnologyType(id=tech.id, name=tech.name) for tech in project.technologies], images=[ProjectImagesType(id=img.id, image_url=img.image_url, project_id=img.project_id) for img in project.images])
         except Exception as e:
             session.rollback()
             raise ValueError(f"Failed to create project: {str(e)}")
@@ -39,8 +37,6 @@ def update_project(id: int, name: str | None = None, description: str | None = N
                 project.description = description if description is not None else project.description
                 project.github_url = github_url if github_url is not None else project.github_url
                 project.short_description = short_description if short_description is not None else project.short_description
-                session.commit()
-                session.refresh(project)
                 if len(technologies) > 0:
                     session.exec(delete(ProjectTechnologyLink).where(ProjectTechnologyLink.project_id == project.id))
                     for tech_name in technologies:

@@ -26,7 +26,6 @@ def handle_created(repository):
             "name": repository.get("name").replace("-", " ").title(),
             "short_description": short_description,
             "github_url": repository.get("html_url"),
-            "description": description or "No description provided",
         }
         owner = repository.get("owner", {}).get("login")
         repo_name = repository.get("name", "")
