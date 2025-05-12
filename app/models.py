@@ -15,6 +15,7 @@ class Project(SQLModel, table=True):
     role: Optional[str] = None
     impact: Optional[str] = None
     github_url: Optional[str] = None
+    link : Optional[str] = None
     technologies: List["Technology"] = Relationship(
         back_populates="projects",
         link_model=ProjectTechnologyLink

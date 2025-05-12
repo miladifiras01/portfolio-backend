@@ -31,9 +31,11 @@ def handle_created(repository):
         repo_name = repository.get("name", "")
         url = repository.get('html_url', "")
         images = get_images(url, owner, repo_name)
+        description = get_description(url, owner, repo_name)
         topics = repository.get("topics")
         repo_data["images"] = images
         repo_data["technologies"] = topics
+        repo_data["description"] = description
         return create_project(**repo_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
