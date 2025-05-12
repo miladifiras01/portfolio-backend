@@ -13,8 +13,7 @@ def create_project(name: str, description: str = "", github_url: str | None = No
                 if not technology:
                     technology = Technology(name=tech_name)
                     session.add(technology)
-                    session.flush()
-                    session.refresh(technology)
+                session.flush()
                 project_technology_link = ProjectTechnologyLink(project_id=project.id, technology_id=technology.id)
                 session.add(project_technology_link)
             for image in images:
@@ -44,8 +43,7 @@ def update_project(id: int, name: str | None = None, description: str | None = N
                         if not technology:
                             technology = Technology(name=tech_name)
                             session.add(technology)
-                            session.flush()
-                            session.refresh(technology)
+                        session.flush()
                         project_technology_link = ProjectTechnologyLink(project_id=project.id, technology_id=technology.id)
                         session.add(project_technology_link)
                 if len(images) > 0:
